@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Details</title>
+  <link rel="stylesheet" href="customerdetails.css">
+  <style>
+    .warning-text {
+      color: red;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="top-bar">
+      <div class="top-left">
+        <img src="back icon.png" alt="Back" onclick="history.back()" />
+      </div>
+      <div class="top-right">
+        <img src="home icon.png" alt="Home" onclick="location.href='homepage.html'" />
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>QUEUE RESERVATION</h1>
+      <form id="customerForm">
+        <div class="location-info">
+          <h3 id="selectedLocation">Loading...</h3>
+          <p>Guests: <span id="guestCount">0</span></p>
+        </div>
+
+        <div class="form-group">
+          <label for="newName">CUSTOMER'S NAME</label>
+          <input type="text" id="newName" required />
+        </div>
+
+        <div class="form-group">
+          <label for="currentEmail">CUSTOMER'S EMAIL</label>
+          <input type="email" id="currentEmail" required />
+        </div>
+
+        <div class="form-group">
+          <label for="currentPhoneNum">CUSTOMER'S PHONE NUMBER</label>
+          <input type="tel" id="currentPhoneNum" name="phone"
+                 pattern="[0-9]{10,15}" maxlength="11" minlength="10"
+                 oninput="validatePhoneInput(this)" required />
+          <small id="phoneWarning" class="warning-text">Please enter a valid phone number (ex. 091********)</small>
+        </div>
+
+        <button type="submit" class="submit-btn">JOIN QUEUE</button>
+      </form>
+    </div>
+
+    <footer>
+      <p><img src="location icon.png" alt="Location Icon" /> <span>Tanay-Pililla Boundary, Manila East Road 1910 Pililla, Philippines</span></p>
+      <p><img src="call icon.png" alt="Phone Icon" /> <span>0945 306 6376</span></p>
+      <p><img src="time icon.png" alt="Clock Icon" /> <span>Monday-Sunday 10:00 AM - 10:00 PM</span></p>
+    </footer>
+  </div>
+  <script src="langModal.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-app-compat.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-database-compat.min.js"></script>
+  
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <script>
+    // Firebase configuration - Replace with your actual config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDtxDpQKE5mXG90SUuX5DfyLmeL7qXCDQs",
+    authDomain: "chess-queue.firebaseapp.com",
+    databaseURL: "https://chess-queue-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chess-queue",
+    storageBucket: "chess-queue.firebasestorage.app",
+    messagingSenderId: "882197528383",
+    appId: "1:882197528383:web:9e6cb10970b0875baf5d8a",
+    measurementId: "G-KKQTXQDV9T"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Initialize EmailJS
+    emailjs.init("hisi4Cx000V48j0QV"); // Replace with your EmailJS public key
+
+    // EmailJS configuration
+    const EMAIL_SERVICE_ID = "service_5d4kgzw"; // Replace with your service ID
+    const EMAIL_TEMPLATE_ID = "template_dq5yafq"; // Replace with your template ID
+
+    // Send confirmation email
+    async function sendConfirmationEmail(customerData) {
+      try {
+        // Format the queue time
+        const queueTime = new Date(customerData.timestamp).toLocaleString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+
+        // Prepare email parameters
+        const emailParams = {
+          to_email: customerData.email,
+          to_name: customerData.name,
+          queue_number: customerData.queueNumber,
+          customer_name: customerData.name,
+          seating_location: customerData.location,
+          number_of_guests: customerData.guests,
+          queue_time: queueTime,
+          restaurant_name: "Ches Cafe", // Customize this
+          restaurant_address: "Tanay-Pililla Boundary, Manila East Road 1910 Pililla, Philippines",
+          restaurant_phone: "0945 306 6376"
+        };
+
+        console.log('Sending email with params:', emailParams);
+
+        // Send email using EmailJS
+        const response = await emailjs.send(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, emailParams);
+        
+        console.log('Email sent successfully:', response);
+        return { success: true, response };
+        
+      } catch (error) {
+        console.error('Error sending email:', error);
+        return { success: false, error };
+      }
+    }
+
+    // Initialize queue counters from RTDB
+    async function initializeQueueCounters() {
+      try {
+        const indoorSnapshot = await database.ref('queueCounters/indoor').once('value');
+        const outdoorSnapshot = await database.ref('queueCounters/outdoor').once('value');
+        
+        if (!indoorSnapshot.exists()) {
+          await database.ref('queueCounters/indoor').set(0);
+        }
+        if (!outdoorSnapshot.exists()) {
+          await database.ref('queueCounters/outdoor').set(0);
+        }
+        
+        // Also sync with localStorage as backup
+        localStorage.setItem('indoorQueueCounter', (indoorSnapshot.val() || 0).toString());
+        localStorage.setItem('outdoorQueueCounter', (outdoorSnapshot.val() || 0).toString());
+      } catch (error) {
+        console.error('Error initializing queue counters:', error);
+        // Fallback to localStorage
+        if (!localStorage.getItem('indoorQueueCounter')) {
+          localStorage.setItem('indoorQueueCounter', '0');
+        }
+        if (!localStorage.getItem('outdoorQueueCounter')) {
+          localStorage.setItem('outdoorQueueCounter', '0');
+        }
+      }
+    }
+
+    // Get queue number from RTDB
+    async function getNextQueueNumber(location) {
+      const locationKey = location.toLowerCase();
+      const counterRef = database.ref(`queueCounters/${locationKey}`);
+      
+      try {
+        // Use transaction to ensure atomic increment
+        const result = await counterRef.transaction((currentValue) => {
+          return (currentValue || 0) + 1;
+        });
+        
+        const newCounter = result.snapshot.val();
+        
+        // Update localStorage backup
+        localStorage.setItem(locationKey + 'QueueCounter', newCounter.toString());
+        
+        // Format queue number (e.g., I001 for indoor, O001 for outdoor)
+        const prefix = location === 'INDOOR' ? 'ID' : 'OD';
+        return prefix + newCounter.toString().padStart(3, '0');
+        
+      } catch (error) {
+        console.error('Error getting queue number from RTDB:', error);
+        
+        // Fallback to localStorage
+        const counterKey = location.toLowerCase() + 'QueueCounter';
+        let currentCounter = parseInt(localStorage.getItem(counterKey)) || 0;
+        currentCounter++;
+        localStorage.setItem(counterKey, currentCounter.toString());
+        
+        const prefix = location === 'INDOOR' ? 'I' : 'O';
+        return prefix + currentCounter.toString().padStart(3, '0');
+      }
+    }
+
+    // Get URL parameters
+    function getUrlParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Phone validation
+    function validatePhoneInput(input) {
+      const warning = document.getElementById("phoneWarning");
+      input.value = input.value.replace(/[^0-9]/g, '');
+      warning.style.display = input.value.length < 10 ? "block" : "none";
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function() {
+      await initializeQueueCounters();
+      
+      // Get selected location and guest count
+      const selectedPlace = localStorage.getItem('selectedPlace');
+      const guestCount = getUrlParameter('guests') || localStorage.getItem('guestCount') || '1';
+      
+      // Check if location was selected
+      if (!selectedPlace) {
+        alert('Please select a seating location first.');
+        window.location.href = 'reservedplace.html';
+        return;
+      }
+      
+      // Update display
+      document.getElementById('selectedLocation').textContent = selectedPlace + ' SEATING';
+      document.getElementById('guestCount').textContent = guestCount;
+      
+      // Store guest count for later use
+      localStorage.setItem('guestCount', guestCount);
+      
+      console.log('Debug - Selected Place:', selectedPlace); // Debug log
+      console.log('Debug - Guest Count:', guestCount); // Debug log
+    });
+
+    // Form submission
+    document.getElementById("customerForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("newName").value.trim();
+      const email = document.getElementById("currentEmail").value.trim();
+      const phone = document.getElementById("currentPhoneNum").value.trim();
+
+      // Validate all fields
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
+
+      if (phone.length < 10) {
+        alert("Please enter a valid phone number (at least 10 digits).");
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = document.querySelector('.submit-btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'JOINING QUEUE...';
+      submitBtn.disabled = true;
+
+      try {
+        // Get selected location and generate queue number
+        const selectedPlace = localStorage.getItem('selectedPlace');
+        const guestCount = localStorage.getItem('guestCount') || '1';
+        
+        // Double-check location is still available
+        if (!selectedPlace) {
+          alert('Session expired. Please select your seating location again.');
+          window.location.href = 'reservedplace.html';
+          return;
+        }
+        
+        console.log('Debug - Submitting with location:', selectedPlace); // Debug log
+        
+        const queueNumber = await getNextQueueNumber(selectedPlace);
+        const locationKey = selectedPlace.toLowerCase(); // 'indoor' or 'outdoor'
+
+        // Create customer data
+        const customerData = {
+          name: name,
+          email: email,
+          phone: phone,
+          location: selectedPlace,
+          guests: parseInt(guestCount),
+          queueNumber: queueNumber,
+          timestamp: new Date().toISOString(),
+          status: 'waiting',
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        // Save to separate queue lists for indoor and outdoor
+        const queueRef = database.ref(`queues/${locationKey}`);
+        const newCustomerRef = queueRef.push();
+        await newCustomerRef.set(customerData);
+
+        // Store customer data with Firebase key for local reference
+        customerData.firebaseKey = newCustomerRef.key;
+        customerData.queuePath = `queues/${locationKey}/${newCustomerRef.key}`;
+        
+        // Store in localStorage for the next page
+        localStorage.setItem('currentCustomer', JSON.stringify(customerData));
+
+        // Also store in a daily queue for better organization (separate by location)
+        //const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        //await database.ref(`dailyQueues/${today}/${locationKey}/${newCustomerRef.key}`).set(customerData);
+
+        console.log('Customer added to queue:', locationKey, queueNumber);
+
+        // Send confirmation email
+        submitBtn.textContent = 'SENDING CONFIRMATION...';
+        const emailResult = await sendConfirmationEmail(customerData);
+        
+        if (emailResult.success) {
+          console.log('Confirmation email sent successfully');
+          // You might want to show a success message or update the UI
+        } else {
+          console.warn('Failed to send confirmation email, but customer was added to queue');
+          // Don't prevent the user from proceeding even if email fails
+        }
+
+        // Success - redirect to confirmation page
+        window.location.href = "onque.html";
+
+      } catch (error) {
+        console.error('Error saving to database:', error);
+        alert('There was an error joining the queue. Please try again.');
+        
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

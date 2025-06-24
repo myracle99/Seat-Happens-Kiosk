@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queue Guest Selection - Ches Cafe</title>
+  <link rel="stylesheet" href="queue.css" />
+</head>
+<body>
+  <section class="page" style="background-image: url('3b1591d2-83ac-454f-ab5e-216a9bde54a4.png');">
+    <header>
+      <img src="chescafe logo.png" alt="Ches Cafe Logo" class="logo" />
+      <a href="homepage.html">
+        <img src="home icon.png" alt="Home Icon" class="home-icon" />
+      </a>
+    </header>
+    <main>
+      <div class="card">
+        <div class="location-display">
+          <span id="selectedLocationDisplay">Loading...</span>
+        </div>
+        
+        <h2>How many of you will be joining us?</h2>
+        
+        <div class="grid">
+          <button onclick="selectGuests(1)"><img src="1 person .png" alt="1 person" /></button>
+          <button onclick="selectGuests(2)"><img src="2 person.png" alt="2 person" /></button>
+          <button onclick="selectGuests(3)"><img src="3 person.png" alt="3 person" /></button>
+          <button onclick="selectGuests(4)"><img src="4 person.png" alt="4 person" /></button>
+          <button onclick="selectGuests(5)"><img src="5 person.png" alt="5 person" /></button>
+          <button onclick="selectGuests(6)"><img src="6 person.png" alt="6 person" /></button>
+          <button onclick="selectGuests(7)"><img src="7 person.png" alt="7 person" /></button>
+          <button onclick="selectGuests(8)"><img src="8 person.png" alt="8 person" /></button>
+          <button onclick="selectGuests(9)"><img src="9 person.png" alt="9 person" /></button>
+          <button onclick="selectGuests(10)"><img src="10 person.png" alt="10 person" /></button>
+          <button onclick="selectGuests(11)"><img src="11 person.png" alt="11 person" /></button>
+          <button onclick="selectGuests(12)"><img src="12 person.png" alt="12 person" /></button>
+        </div>
+        
+        <div class="note">If your party size is larger than 12 guests, please contact the restaurant directly.</div>
+      </div>
+    </main>
+    <footer>
+      <p><img src="location icon.png" alt="Location Icon" /> <span>Tanay-Pililla Boundary, Manila East Road 1910 Pililla, Philippines</span></p>
+      <p><img src="call icon.png" alt="Phone Icon" /> <span>0945 306 6376</span></p>
+      <p><img src="time icon.png" alt="Clock Icon" /> <span>Monday-Sunday 10:00 AM - 10:00 PM</span></p>
+    </footer>
+  </section>
+  <script src="langModal.js"></script>
+  <script>
+    // Display selected location when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const selectedPlace = localStorage.getItem('selectedPlace');
+      const locationDisplay = document.getElementById('selectedLocationDisplay');
+      
+      if (selectedPlace) {
+        locationDisplay.textContent = `Selected: ${selectedPlace} SEATING`;
+      } else {
+        // If no location selected, redirect back to location selection
+        alert('Please select a seating location first.');
+        window.location.href = 'reservedplace.html';
+      }
+    });
+
+    // Handle guest selection
+    function selectGuests(guestCount) {
+      // Verify that location is still stored
+      const selectedPlace = localStorage.getItem('selectedPlace');
+      
+      if (!selectedPlace) {
+        alert('Session expired. Please select your seating location again.');
+        window.location.href = 'reservedplace.html';
+        return;
+      }
+      
+      // Store guest count and navigate to customer details
+      localStorage.setItem('guestCount', guestCount.toString());
+      
+      // Always go to customerdetails.html with guest count as URL parameter
+      window.location.href = `customerdetails.html?guests=${guestCount}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  background: url('webiste\ bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: black;
+}
+
+.logo {
+  height: 80px;
+}
+
+.home-icon {
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+
+main {
+  flex: 1;
+  text-align: center;
+  padding: 100px 20px 40px;
+}
+
+h1 {
+  color: #d9ff00;
+  font-size: 3rem;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.confirmation-text {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  font-size: 14px;
+  color: #fff;
+  padding: 20px 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+}
+
+footer img {
+  width: 16px;
+  vertical-align: middle;
+}

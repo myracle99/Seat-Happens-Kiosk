@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reserve Place - Ches Cafe</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      color: white;
+      background-image: url('webiste bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100%;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      background: no-repeat center center/cover;
+      display: flex;
+      flex-direction: column;
+      z-index: 0;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1;
+    }
+
+    header, main, footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      width: 120px;
+      margin: 20px;
+    }
+
+    .home-icon {
+      width: 40px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      padding: 40px 30px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .card p {
+      margin: 0 0 30px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button-group button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      min-width: 120px;
+    }
+
+    .button-group button:hover {
+      background-color: darkred;
+    }
+
+    .button-group button:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      font-size: 14px;
+      color: #fff;
+      padding: 20px 10px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    footer p {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 0;
+    }
+
+    footer img {
+      width: 16px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 600px) {
+      footer {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="page" style="background-image: url('756b435b-1f0c-4514-a63a-4a0fc3017407.png');">
+    <header>
+      <img src="chescafe logo.png" alt="Ches Cafe Logo" class="logo" />
+      <a href="homepage.html"><img src="home icon.png" alt="Home Icon" class="home-icon" /></a>
+    </header>
+
+    <main>
+      <div class="card">
+        <p>Where would you like to reserve for?</p>
+        <div class="button-group">
+          <button id="indoorBtn" onclick="selectPlace('INDOOR')">INDOOR</button>
+          <button id="outdoorBtn" onclick="selectPlace('OUTDOOR')">OUTDOOR</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p><img src="location icon.png" alt="Location Icon" /> Tanay-Pililla Boundary, Manila East Road 1910 Pililla, Philippines</p>
+      <p><img src="call icon.png" alt="Phone Icon" /> 0945 306 6376</p>
+      <p><img src="time icon.png" alt="Clock Icon" /> Monday-Sunday 10:00 AM - 10:00 PM</p>
+    </footer>
+  </section>
+  <script src="langModal.js"></script>
+  <script>
+    function selectPlace(place) {
+      console.log('Selecting place:', place); // Debug log
+      
+      // Disable buttons to prevent double-clicks
+      document.getElementById('indoorBtn').disabled = true;
+      document.getElementById('outdoorBtn').disabled = true;
+      
+      try {
+        // Clear any previous selection first
+        localStorage.removeItem('selectedPlace');
+        
+        // Store the selected place
+        localStorage.setItem('selectedPlace', place);
+        
+        // Verify it was stored correctly
+        const storedPlace = localStorage.getItem('selectedPlace');
+        console.log('Stored place:', storedPlace); // Debug log
+        
+        if (storedPlace === place) {
+          console.log('Storage successful, navigating to queue.html'); // Debug log
+          // Use a small delay to ensure localStorage operation completes
+          setTimeout(() => {
+            window.location.href = 'queue.html';
+          }, 100);
+        } else {
+          throw new Error('Failed to store location selection');
+        }
+        
+      } catch (error) {
+        console.error('Error storing location:', error);
+        alert('There was an error selecting your location. Please try again.');
+        
+        // Re-enable buttons
+        document.getElementById('indoorBtn').disabled = false;
+        document.getElementById('outdoorBtn').disabled = false;
+      }
+    }
+    
+    // Clear any old selections when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Clear previous session data to ensure fresh start
+      localStorage.removeItem('selectedPlace');
+      localStorage.removeItem('guestCount');
+      localStorage.removeItem('currentCustomer');
+      
+      console.log('Page loaded, localStorage cleared'); // Debug log
+    });
+  </script>
+</body>
+</html>

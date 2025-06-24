@@ -1,0 +1,256 @@
+.ephesis-regular {
+  font-family: "Ephesis", cursive;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 100px; /* Increased from 80px */
+  margin: 0 0 5px;
+}
+
+/* General body & layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Georgia', serif;
+  background: url('webiste\ bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+  text-align: center;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+}
+
+.logo {
+  height: 100px;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: center;
+}
+
+.icon {
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icons a.icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Main Content */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* pull text upward */
+  align-items: center;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.content h1 {
+  letter-spacing: 1.5px;
+  margin: 0 0 8px;
+}
+
+.content h2 {
+  font-size: 60px;
+  color: #ff3434;
+  font-weight: bold;
+  margin: 0 0 8px;
+  letter-spacing: 1px;
+}
+
+.tagline {
+  font-size: 25px;
+  margin: 8px 0 24px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 75px; /* Push buttons slightly lower */
+}
+
+.btn {
+  background-color: limegreen;
+  color: black;
+  padding: 14px 30px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 30px;
+  box-shadow: 0 4px 0 darkgreen;
+  transition: transform 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Language Button */
+.lang-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Footer */
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  font-size: 14px;
+  color: #fff;
+  padding: 15px 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer img {
+  width: 16px;
+  vertical-align: middle;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  color: black;
+  margin: 10% auto;
+  padding: 30px;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.lang-option {
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+  gap: 8px;
+  border: 1px solid transparent;
+}
+
+.lang-option:hover {
+  background-color: #d6eaff;
+  border-color: #3498db;
+}
+
+.flag {
+  font-size: 1.2rem;
+}
+
+#langBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+#langBtn:hover {
+  background-color: #e1f0ff;
+}
+
+#currentLang {
+  font-weight: 700;
+  color: #333;
+}
+
+/* Red Neon Glow Animation */
+@keyframes redNeon {
+  from {
+    text-shadow:
+      0 0 5px #000000,
+      0 0 10px #ff1a1a,
+      0 0 20px #3e0404,
+      0 0 40px #e60000,
+      0 0 60px #4d0707;
+  }
+  to {
+    text-shadow:
+      0 0 10px #570a0a,
+      0 0 20px #5e0909,
+      0 0 30px #ff1a1a,
+      0 0 50px #e60000,
+      0 0 80px #b30000;
+  }
+}
+
+/* Apply to restaurant name */
+.content h2 {
+  font-size: 60px;
+  font-weight: bold;
+  margin: 0 0 8px;
+  letter-spacing: 1px;
+  color: #ff1a1a;
+  animation: redNeon 1.3s ease-in-out infinite alternate;
+}
