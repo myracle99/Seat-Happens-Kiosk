@@ -1,0 +1,220 @@
+/* Reset & Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* Background Styling */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #1a0000, #4d0000, #800000); /* Dark red gradient */
+    color: white;
+    padding: 20px;
+    padding-top: 120px; /* Account for fixed header */
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+.header-left,
+.header-center,
+.header-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-left {
+    justify-content: flex-start;
+}
+
+.header-right {
+    justify-content: flex-end;
+}
+
+.logo {
+    height: 60px;
+}
+
+.home-icon {
+    height: 40px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.home-icon:hover {
+    opacity: 0.7;
+}
+
+/* Main Title */
+.main-title {
+    color: #ff0000;
+    font-size: 2.5em;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+/* Queue Display Container */
+.queue-container {
+    background: linear-gradient(to bottom, #000000, #330000, #1a0000);
+    border-radius: 20px;
+    padding: 50px;
+    width: 95%;
+    max-width: 900px;
+    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.3);
+    border: 3px solid #cc0000;
+    margin-bottom: 80px; /* Account for footer */
+}
+
+/* Header */
+.queue-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Queue Lists */
+.queue-lists {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    min-height: 200px;
+}
+
+.indoor-list, .outdoor-list {
+    flex: 1;
+    text-align: left;
+    padding: 0 30px;
+}
+
+.indoor-list .queue-item, .outdoor-list .queue-item {
+    margin-bottom: 15px;
+}
+
+.indoor-list .id, .outdoor-list .id {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Now Serving Section */
+.now-serving {
+    margin: 30px 0;
+    padding: 20px;
+}
+
+.now-serving-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.now-serving-divider {
+    width: 60px;
+    height: 4px;
+    background-color: #ffff00;
+    margin: 10px auto 20px auto;
+}
+
+.now-serving-text {
+    font-size: 50px;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 12px;
+    padding: 15px 20px;
+    z-index: 10;
+    color: white;
+}
+
+.footer div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+}
+
+.footer img {
+    height: 16px;
+    width: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .queue-container {
+        padding: 30px 20px;
+    }
+
+    .main-title {
+        font-size: 2em;
+    }
+
+    .queue-header h2 {
+        font-size: 20px;
+    }
+
+    .indoor-list .id, .outdoor-list .id {
+        font-size: 22px;
+    }
+
+    .now-serving-text {
+        font-size: 40px;
+    }
+
+    .indoor-list, .outdoor-list {
+        padding: 0 15px;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    .logo {
+        height: 50px;
+    }
+
+    .home-icon {
+        height: 35px;
+    }
+
+    body {
+        padding-top: 100px;
+    }
+}

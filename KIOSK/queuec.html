@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On Queue</title>
+    <link rel="stylesheet" href="queuec.css">
+</head>
+<body>
+    <header>
+    <div class="header-left">
+        <img src="chescafe logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="header-center">
+        <h1 class="main-title">ON QUEUE</h1>
+    </div>
+    <div class="header-right"><!-- empty to balance flex --></div>
+</header>
+
+    <!-- Queue Display Container -->
+    <div class="queue-container">
+        <div class="queue-header">
+            <h2>INDOOR</h2>
+            <h2>OUTDOOR</h2>
+        </div>
+
+        <div class="queue-lists">
+            <div class="indoor-list" id="indoorQueue">
+                <div class="loading">Loading...</div>
+            </div>
+            
+            <div class="outdoor-list" id="outdoorQueue">
+                <div class="loading">Loading...</div>
+            </div>
+        </div>
+
+        <div class="now-serving">
+            <div class="now-serving-title">NOW SERVING:</div>
+            <div class="now-serving-divider"></div>
+            <div class="now-serving-text" id="nowServingDisplay">-</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div><img src="location icon.png" alt=""> Tanay-Pililla Boundary, Manila East Road 1910 Pililla, Philippines</div>
+        <div><img src="call icon.png" alt=""> 0945 306 6376</div>
+        <div><img src="time icon.png" alt=""> Monday-Sunday 10:00 AM - 10:00 PM</div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-database-compat.min.js"></script>
+
+    <script>
+        // Firebase configuration - Same as manageq.html
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtxDpQKE5mXG90SUuX5DfyLmeL7qXCDQs",
+            authDomain: "chess-queue.firebaseapp.com",
+            databaseURL: "https://chess-queue-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "chess-queue",
+            storageBucket: "chess-queue.firebasestorage.app",
+            messagingSenderId: "882197528383",
+            appId: "1:882197528383:web:9e6cb10970b0875baf5d8a",
+            measurementId: "G-KKQTXQDV9T"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Global variables to store queue data
+        let indoorQueueData = {};
+        let outdoorQueueData = {};
+        let currentlyServedCustomer = null;
+
+        // Function to display queue for customer view
+        function displayQueue(location, queueData) {
+            const containerId = location + 'Queue';
+            const container = document.getElementById(containerId);
+            
+            if (!queueData || Object.keys(queueData).length === 0) {
+                container.innerHTML = '<div class="empty-queue">No customers in queue</div>';
+                return;
+            }
+
+            // Convert object to array and sort by timestamp (oldest first)
+            const customers = Object.entries(queueData).map(([key, customer]) => ({
+                ...customer,
+                firebaseKey: key
+            }));
+            
+            customers.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            let html = '';
+            customers.forEach((customer) => {
+                html += `
+                    <div class="queue-item">
+                        <div class="id">${customer.queueNumber}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Function to update the "Now Serving" display
+        function updateNowServingDisplay() {
+            const nowServingElement = document.getElementById('nowServingDisplay');
+            
+            if (currentlyServedCustomer) {
+                nowServingElement.textContent = currentlyServedCustomer.queueNumber;
+            } else {
+                nowServingElement.textContent = '-';
+            }
+        }
+
+        // Function to load queues and now serving from Firebase
+        function loadQueues() {
+            // Listen for indoor queue changes
+            database.ref('queues/indoor').on('value', (snapshot) => {
+                indoorQueueData = snapshot.val() || {};
+                displayQueue('indoor', indoorQueueData);
+                console.log('Indoor queue updated:', Object.keys(indoorQueueData).length, 'customers');
+            }, (error) => {
+                console.error('Error loading indoor queue:', error);
+                document.getElementById('indoorQueue').innerHTML = '<div class="error-message">Error loading indoor queue</div>';
+            });
+
+            // Listen for outdoor queue changes
+            database.ref('queues/outdoor').on('value', (snapshot) => {
+                outdoorQueueData = snapshot.val() || {};
+                displayQueue('outdoor', outdoorQueueData);
+                console.log('Outdoor queue updated:', Object.keys(outdoorQueueData).length, 'customers');
+            }, (error) => {
+                console.error('Error loading outdoor queue:', error);
+                document.getElementById('outdoorQueue').innerHTML = '<div class="error-message">Error loading outdoor queue</div>';
+            });
+
+            // Listen for "nowServing" changes
+            database.ref('nowServing').on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    // Get the first (and should be only) customer being served
+                    const nowServingData = snapshot.val();
+                    const firstKey = Object.keys(nowServingData)[0];
+                    currentlyServedCustomer = nowServingData[firstKey];
+                    console.log('Now serving:', currentlyServedCustomer.queueNumber);
+                } else {
+                    currentlyServedCustomer = null;
+                    console.log('No one currently being served');
+                }
+                updateNowServingDisplay();
+            }, (error) => {
+                console.error('Error loading now serving:', error);
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Loading customer queue display...');
+            loadQueues();
+            updateNowServingDisplay();
+        });
+
+        // Cleanup Firebase listeners when page unloads
+        window.addEventListener('beforeunload', function() {
+            database.ref('queues/indoor').off();
+            database.ref('queues/outdoor').off();
+            database.ref('nowServing').off();
+        });
+
+        // Auto-refresh the page every 30 seconds to ensure fresh data
+        setInterval(function() {
+            // Optional: You can remove this if real-time updates are working well
+            // location.reload();
+        }, 30000);
+    </script>
+
+    <style>
+        /* Additional styles for loading and error states */
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #ff0000;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        .empty-queue {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        /* Ensure queue items are properly styled */
+        .queue-item {
+            margin-bottom: 10px;
+        }
+
+        .queue-item .id {
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</body>
+</html>

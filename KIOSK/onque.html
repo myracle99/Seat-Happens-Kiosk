@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Queue Reservation Received - Ches Café</title>
+  <title>Website Reservation Received - Ches Café</title>
   <link rel="stylesheet" href="onque.css"/>
 </head>
 <body>
@@ -13,7 +13,16 @@
   </header>
 
   <main>
-    <h1 data-translate="bookingReceived">YOU'RE ON QUEUE!</h1>
+    <!-- Lottie Animation Canvas -->
+    <div class="animation-container">
+      <canvas id="dotlottie-canvas" width="210" height="210"></canvas>
+    </div>
+
+    <!-- Booking Message -->
+    <h1 data-translate="bookingReceived" class="ephesis-regular">
+      You're on Queue!
+    </h1>
+
     <p class="confirmation-text" data-translate="confirmationText">
       We're glad you chose Ches Café. Please check your email for the receipt and present it to our counter upon arrival.
       If you have any concerns or questions, feel free to reach out—we're happy to help! See you soon for a cup of comfort!
@@ -26,7 +35,17 @@
     <p><img src="time icon.png" alt="Clock Icon" /> <span data-translate="hours">Monday-Sunday 10:00 AM - 10:00 PM</span></p>
   </footer>
 
-  <!-- Include the translator script -->
+  <script type="module">
+    import { DotLottie } from "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web/+esm";
+
+    new DotLottie({
+      autoplay: true,
+      loop: true,
+      canvas: document.getElementById("dotlottie-canvas"),
+      src: "https://lottie.host/79676e55-55f9-4c4b-aea2-0a7a431aade3/1HEU5jngeY.lottie" // Replace with actual URL
+    });
+  </script>
+
   <script src="langModal.js"></script>
 </body>
 </html>

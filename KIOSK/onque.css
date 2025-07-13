@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ephesis&display=swap');
+
 html, body {
   height: 100%;
   margin: 0;
@@ -8,6 +10,13 @@ html, body {
   color: white;
   background: url('webiste\ bg.jpg') no-repeat center center fixed;
   background-size: cover;
+}
+
+.ephesis-regular {
+  font-family: 'Ephesis', cursive;
+  font-size: 3.5rem;
+  color: #d9ff00;
+  margin-bottom: 20px;
 }
 
 header {
@@ -31,14 +40,11 @@ header {
 main {
   flex: 1;
   text-align: center;
-  padding: 100px 20px 40px;
+  padding: 60px 20px 40px;
 }
 
-h1 {
-  color: #d9ff00;
-  font-size: 3rem;
-  margin-bottom: 30px;
-  font-weight: 600;
+.animation-container {
+  margin-bottom: 10px;
 }
 
 .confirmation-text {
