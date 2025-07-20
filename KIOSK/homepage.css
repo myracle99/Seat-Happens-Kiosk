@@ -8,17 +8,19 @@
 
 /* General body & layout */
 html, body {
-  height: 100%;
   margin: 0;
   padding: 0;
+  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Georgia', serif;
-  background: url('webiste\ bg.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(180deg, #000000, #4d0000); /* dark to deep red */
+  background-attachment: fixed; /* makes it stay fixed on scroll */
   color: white;
   text-align: center;
 }
+
 
 /* Header */
 header {

@@ -10,17 +10,17 @@
       padding: 0;
       font-family: sans-serif;
       color: white;
-      background-image: url('webiste bg.jpg');
+      height: 100%;
+      background: linear-gradient(180deg, #000000, #4d0000); /* Gradient replaces image */
+      background-attachment: fixed;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      height: 100%;
     }
 
     .page {
       position: relative;
       min-height: 100vh;
-      background: no-repeat center center/cover;
       display: flex;
       flex-direction: column;
       z-index: 0;
@@ -30,7 +30,6 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
       z-index: 1;
     }
 

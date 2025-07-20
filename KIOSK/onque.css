@@ -2,15 +2,17 @@
 
 html, body {
   height: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
-  background: url('webiste\ bg.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(180deg, #000000, #4d0000); /* uniform gradient */
+  background-attachment: fixed; /* prevents cut-off when scrolling */
 }
+
 
 .ephesis-regular {
   font-family: 'Ephesis', cursive;

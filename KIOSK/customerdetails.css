@@ -1,11 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: black;
-  background-image: url('webiste\ bg.jpg'); 
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background: linear-gradient(180deg, #000000, #4d0000); /* uniform gradient */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
