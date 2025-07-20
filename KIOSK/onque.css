@@ -71,10 +71,9 @@ footer {
 }
 
 footer p {
-  display: flex;
-  align-items: center;
+
   gap: 5px;
-  margin: 0;
+  margin: 7px;
 }
 
 footer img {

@@ -33,15 +33,47 @@
       z-index: 1;
     }
 
-    header, main, footer {
+    main, footer {
       position: relative;
       z-index: 2;
     }
 
-    .logo {
-      width: 120px;
-      margin: 20px;
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px;
     }
+
+    .logo {
+      height: 100px;
+    }
+
+    .icons {
+      display: flex;
+      flex-direction: row;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .icon {
+      height: 36px;
+      width: 36px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .icons a.icon img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      display: block;
+    }
+
+  
 
     .home-icon {
       width: 40px;
@@ -101,29 +133,23 @@
     }
 
     footer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      font-size: 14px;
-      color: #fff;
-      padding: 20px 10px;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.4);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #fff;
+  padding: 15px 10px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
 
-    footer p {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin: 0;
-    }
-
-    footer img {
-      width: 16px;
-      vertical-align: middle;
-    }
+footer img {
+  width: 16px;
+  vertical-align: middle;
+}
 
     @media (max-width: 600px) {
       footer {
@@ -139,12 +165,16 @@
   </style>
 </head>
 <body>
+  <header>
+    <img src="chescafe logo.png" alt="Ches Cafe Logo" class="logo" />
+    <div class="icons">
+    
+      <a href="homepage.html" class="icon">
+        <img src="home icon.png" alt="Home" />
+      </a>
+    </div>
+  </header>
   <section class="page" style="background-image: url('756b435b-1f0c-4514-a63a-4a0fc3017407.png');">
-    <header>
-      <img src="chescafe logo.png" alt="Ches Cafe Logo" class="logo" />
-      <a href="homepage.html"><img src="home icon.png" alt="Home Icon" class="home-icon" /></a>
-    </header>
-
     <main>
       <div class="card">
         <p>Where would you like to reserve for?</p>

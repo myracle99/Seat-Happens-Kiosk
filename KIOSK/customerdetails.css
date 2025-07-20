@@ -97,18 +97,20 @@ label {
 }
 
 /* Footer - Fixed to bottom */
+
+/* Footer */
 footer {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 30px;
+  font-family: Arial, sans-serif;
   font-size: 14px;
   color: #fff;
   padding: 15px 10px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.4);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  margin-top: auto;
 }
 
 footer img {
@@ -118,11 +120,7 @@ footer img {
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  footer {
-    flex-direction: column;
-    gap: 10px;
-    font-size: 12px;
-  }
+
   
   .container {
     margin: 1rem;

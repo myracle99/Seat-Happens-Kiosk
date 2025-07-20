@@ -65,7 +65,8 @@ header {
   justify-content: flex-start; /* pull text upward */
   align-items: center;
   text-align: center;
-  padding-top: 60px;
+  padding-top: 0px;
+  padding-bottom: 60px; 
 }
 
 .content h1 {
@@ -126,6 +127,7 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 30px;
+  font-family: Arial, sans-serif;
   font-size: 14px;
   color: #fff;
   padding: 15px 10px;
